@@ -42,8 +42,14 @@ public final class TimelineView: UIView {
       recalculateEventLayout()
       prepareEventViews()
       allDayView.events = allDayLayoutAttributes.map { $0.descriptor }
-      allDayView.isHidden = allDayLayoutAttributes.count == 0
+      allDayView.isHidden = (allDayLayoutAttributes.count == 0 || style.hideAllDayView)
       allDayView.scrollToBottom()
+
+      allDaySummaryView.events = regularLayoutAttributes.map { $0.descriptor }
+      allDaySummaryView.date = date
+      
+      allDayEventView.events = allDayLayoutAttributes.map { $0.descriptor }
+      allDayEventView.isHidden = (allDayLayoutAttributes.count == 0 || style.hideAllDayEventView)
       
       setNeedsLayout()
     }
@@ -64,7 +70,7 @@ public final class TimelineView: UIView {
   private lazy var nowLine: CurrentTimeIndicator = CurrentTimeIndicator()
   
   private var allDayViewTopConstraint: NSLayoutConstraint?
-  private lazy var allDayView: AllDayView = {
+  public lazy var allDayView: AllDayView = {
     let allDayView = AllDayView(frame: CGRect.zero)
     
     allDayView.translatesAutoresizingMaskIntoConstraints = false
@@ -78,9 +84,44 @@ public final class TimelineView: UIView {
 
     return allDayView
   }()
+  public var allDayViewHeight: CGFloat  = 0
   
-  var allDayViewHeight: CGFloat {
-    return allDayView.bounds.height
+  private var allDaySummaryViewTopConstraint: NSLayoutConstraint?
+  public lazy var allDaySummaryView: AllDaySummaryView = {
+    let allDaySummaryView = AllDaySummaryView(frame: CGRect.zero)
+    
+    allDaySummaryView.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(allDaySummaryView)
+
+    self.allDaySummaryViewTopConstraint = allDaySummaryView.topAnchor.constraint(equalTo: topAnchor, constant: 0)
+    self.allDaySummaryViewTopConstraint?.isActive = true
+
+    allDaySummaryView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
+    allDaySummaryView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
+
+    return allDaySummaryView
+  }()
+  
+  public var allDaySummaryViewHeight: CGFloat = 40.0
+  
+  private var allDayEventViewTopConstraint: NSLayoutConstraint?
+  public lazy var allDayEventView: AllDayEventView = {
+    let allDayEventView = AllDayEventView(frame: CGRect.zero)
+    
+    allDayEventView.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(allDayEventView)
+
+    self.allDayEventViewTopConstraint = allDayEventView.topAnchor.constraint(equalTo: topAnchor, constant: 0)
+    self.allDayEventViewTopConstraint?.isActive = true
+
+    allDayEventView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
+    allDayEventView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
+
+    return allDayEventView
+  }()
+  
+  public var allDayEventViewHeight: CGFloat {
+    return allDayEventView.allDayEventViewHeight
   }
 
   var style = TimelineStyle()
@@ -192,12 +233,12 @@ public final class TimelineView: UIView {
   }
   
   private func findEventView(at point: CGPoint) -> EventView? {
-    for eventView in allDayView.eventViews {
+   /* for eventView in allDayView.eventViews {
       let frame = eventView.convert(eventView.bounds, to: self)
       if frame.contains(point) {
         return eventView
       }
-    }
+    }*/
 
     for eventView in eventViews {
       let frame = eventView.frame
@@ -231,7 +272,16 @@ public final class TimelineView: UIView {
   public func updateStyle(_ newStyle: TimelineStyle) {
     style = newStyle
     allDayView.updateStyle(style.allDayStyle)
+    allDaySummaryView.updateStyle(style.allDaySummaryStyle)
+    allDayEventView.updateStyle(style.allDayEventStyle)
+    
     nowLine.updateStyle(style.timeIndicator)
+    
+    allDayView.isHidden = newStyle.hideAllDayView
+    allDayViewHeight = newStyle.hideAllDayView ? 0 : allDayView.bounds.height
+    
+    allDaySummaryView.isHidden = false
+    allDaySummaryViewHeight = 40.0
     
     switch style.dateStyle {
       case .twelveHour:
@@ -242,7 +292,7 @@ public final class TimelineView: UIView {
         is24hClock = calendar.locale?.uses24hClock() ?? Locale.autoupdatingCurrent.uses24hClock()
     }
     
-    backgroundColor = style.backgroundColor
+    backgroundColor = style.backgroundTimeLineView
     setNeedsDisplay()
   }
   
@@ -375,6 +425,8 @@ public final class TimelineView: UIView {
     layoutEvents()
     layoutNowLine()
     layoutAllDayEvents()
+    layoutAllDaySummaryEvents()
+    layoutAllDayEventEvents()
   }
 
   private func layoutNowLine() {
@@ -419,6 +471,16 @@ public final class TimelineView: UIView {
     bringSubviewToFront(allDayView)
   }
   
+  private func layoutAllDaySummaryEvents() {
+    //add day view needs to be in front of the nowLine
+    bringSubviewToFront(allDaySummaryView)
+  }
+  
+  private func layoutAllDayEventEvents() {
+    //add day view needs to be in front of the nowLine
+    bringSubviewToFront(allDayEventView)
+  }
+  
   /**
    This will keep the allDayView as a staionary view in its superview
    
@@ -428,6 +490,20 @@ public final class TimelineView: UIView {
   public func offsetAllDayView(by yValue: CGFloat) {
     if let topConstraint = self.allDayViewTopConstraint {
       topConstraint.constant = yValue
+      layoutIfNeeded()
+    }
+  }
+  
+  public func offsetAllDaySummaryView(by yValue: CGFloat) {
+    if let topConstraint = self.allDaySummaryViewTopConstraint {
+      topConstraint.constant = yValue
+      layoutIfNeeded()
+    }
+  }
+  
+  public func offsetAllDayEventView(by yValue: CGFloat) {
+    if let topConstraint = self.allDayEventViewTopConstraint {
+      topConstraint.constant = yValue + allDaySummaryViewHeight
       layoutIfNeeded()
     }
   }

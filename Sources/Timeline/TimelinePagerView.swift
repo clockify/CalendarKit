@@ -238,7 +238,7 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
 
         
       let rightToLeft = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft
-      let x = rightToLeft ? 0 : timeline.style.leadingInset
+      let x = rightToLeft ? 0 : (timeline.style.leadingInset + 10)
       let newRect = CGRect(x: x,
                            y: yStart,
                            width: timeline.calendarWidth,
@@ -351,7 +351,7 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
         let x = leftToRight ? style.leadingInset : 0
         
         var eventFrame = editedEventView.frame
-        eventFrame.origin.x = x
+        eventFrame.origin.x = x + 10
         eventFrame.origin.y = timeline.dateToY(snapped) - currentTimeline.container.contentOffset.y
 
         if resizeHandleTag == 0 {

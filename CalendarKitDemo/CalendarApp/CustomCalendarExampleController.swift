@@ -39,11 +39,6 @@ class CustomCalendarExampleController: DayViewController {
   
   var generatedEvents = [EventDescriptor]()
   var alreadyGeneratedSet = Set<Date>()
-  
-  var colors = [UIColor.blue,
-                UIColor.yellow,
-                UIColor.green,
-                UIColor.red]
 
   private lazy var rangeFormatter: DateIntervalFormatter = {
     let fmt = DateIntervalFormatter()
@@ -94,11 +89,19 @@ class CustomCalendarExampleController: DayViewController {
       print(timezone)
 
       info.append(rangeFormatter.string(from: event.dateInterval.start, to: event.dateInterval.end))
-      event.text = info.reduce("", {$0 + $1 + "\n"})
-      event.color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
+//      event.text = info.reduce("", {$0 + $1 + "\n"})
+      event.attributedText = NSAttributedString(string: "test", attributes:[NSAttributedString.Key.foregroundColor: UIColor.red, NSAttributedString.Key.backgroundColor: UIColor.yellow])
+      event.backgroundColor = .cyan
+//      event.color = .red
       event.isAllDay = Int(arc4random_uniform(2)) % 2 == 0
       event.lineBreakMode = .byTruncatingTail
-
+      event.timeLabelText = "32:14:21"
+      event.additionalButton1Text = "$"
+      event.additionalButton1TextColor = .blue
+      event.additionalButton1Width = 15
+      event.additionalButton1Font = UIFont.systemFont(ofSize: 10)
+//      event.additionalButton2Image = UIImage(named: "lockExpense")!
+//      event.additionalButton2Width = 15
       events.append(event)
       
       let nextOffset = Int.random(in: 40 ... 250)
@@ -170,7 +173,7 @@ class CustomCalendarExampleController: DayViewController {
 
     info.append(rangeFormatter.string(from: event.dateInterval)!)
     event.text = info.reduce("", {$0 + $1 + "\n"})
-    event.color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
+    event.color = .blue
     event.editedEvent = event
 
     return event

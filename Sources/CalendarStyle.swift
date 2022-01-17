@@ -60,13 +60,18 @@ public struct SwipeLabelStyle {
 
 public struct TimelineStyle {
   public var allDayStyle = AllDayViewStyle()
+  public var allDaySummaryStyle = AllDaySummaryViewStyle()
+  public var allDayEventStyle = AllDayEventViewStyle()
   public var timeIndicator = CurrentTimeIndicatorStyle()
   public var timeColor = SystemColors.secondaryLabel
   public var separatorColor = SystemColors.systemSeparator
   public var backgroundColor = SystemColors.systemBackground
+  public var backgroundTimeLineView = SystemColors.systemBackground
   public var font = UIFont.boldSystemFont(ofSize: 11)
   public var dateStyle : DateStyle = .system
   public var eventsWillOverlap: Bool = false
+  public var hideAllDayView: Bool = true
+  public var hideAllDayEventView: Bool = false
   public var minimumEventDurationInMinutesWhileEditing: Int = 30
   public var splitMinuteInterval: Int = 15
   public var verticalDiff: CGFloat = 50
@@ -87,5 +92,25 @@ public struct AllDayViewStyle {
   public var backgroundColor: UIColor = SystemColors.systemGray4
   public var allDayFont = UIFont.systemFont(ofSize: 12.0)
   public var allDayColor: UIColor = SystemColors.label
+  public init() {}
+}
+
+public struct AllDaySummaryViewStyle {
+  public var backgroundColor: UIColor = SystemColors.systemGray4
+  public var dateLabelFont = UIFont.systemFont(ofSize: 12.0)
+  public var dateLabelColor: UIColor = SystemColors.label
+  public var timeLabelFont = UIFont.systemFont(ofSize: 12.0)
+  public var timeLabelColor: UIColor = SystemColors.label
+  public var borderColor: UIColor = SystemColors.systemGray4
+  public var borderWidth: CGFloat = 1.0
+  public init() {}
+}
+
+public struct AllDayEventViewStyle {
+  public var backgroundColor: UIColor = SystemColors.systemGray4
+  public var allDayEventFont = UIFont.systemFont(ofSize: 11.0)
+  public var allDayEventColor: UIColor = SystemColors.label
+  public var borderColor: UIColor = SystemColors.systemGray4
+  public var borderWidth: CGFloat = 1.0
   public init() {}
 }

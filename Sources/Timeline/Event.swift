@@ -1,6 +1,41 @@
 import UIKit
 
 public final class Event: EventDescriptor {
+  
+  public var additionalButton1Text: String = ""
+  public var additionalButton1Font: UIFont = UIFont.systemFont(ofSize: 12)
+  public var additionalButton1TextColor: UIColor = SystemColors.label
+  public var additionalButton1Image: UIImage = UIImage()
+  public var additionalButton1Width: CGFloat = 0
+  
+  public var additionalButton2Text: String = ""
+  public var additionalButton2Font: UIFont = UIFont.systemFont(ofSize: 12)
+  public var additionalButton2TextColor: UIColor = SystemColors.label
+  public var additionalButton2Image: UIImage = UIImage()
+  public var additionalButton2Width: CGFloat = 0
+  
+  public var additionalButton3Text: String = ""
+  public var additionalButton3Font: UIFont = UIFont.systemFont(ofSize: 12)
+  public var additionalButton3TextColor: UIColor = SystemColors.label
+  public var additionalButton3Image: UIImage = UIImage()
+  public var additionalButton3Width: CGFloat = 0
+  
+  public var additionalButton4Text: String = ""
+  public var additionalButton4Font: UIFont = UIFont.systemFont(ofSize: 12)
+  public var additionalButton4TextColor: UIColor = SystemColors.label
+  public var additionalButton4Image: UIImage = UIImage()
+  public var additionalButton4Width: CGFloat = 0
+  
+  public var additionalButton5Text: String = ""
+  public var additionalButton5Font: UIFont = UIFont.systemFont(ofSize: 12)
+  public var additionalButton5TextColor: UIColor = SystemColors.label
+  public var additionalButton5Image: UIImage = UIImage()
+  public var additionalButton5Width: CGFloat = 0
+  
+  public var timeLabelText: String = ""
+  public var timeLabelfont: UIFont = UIFont.systemFont(ofSize: 12)
+  public var timeLabelTextColor: UIColor = SystemColors.label
+  
   public var dateInterval = DateInterval()
   public var isAllDay = false
   public var text = ""
@@ -34,6 +69,29 @@ public final class Event: EventDescriptor {
     cloned.backgroundColor = backgroundColor
     cloned.textColor = textColor
     cloned.userInfo = userInfo
+    cloned.timeLabelText = timeLabelText
+    cloned.timeLabelTextColor = timeLabelTextColor
+
+    cloned.additionalButton1Text = additionalButton1Text
+    cloned.additionalButton1Image = additionalButton1Image
+    cloned.additionalButton1Width = additionalButton1Width
+    
+    cloned.additionalButton2Text = additionalButton2Text
+    cloned.additionalButton2Image = additionalButton2Image
+    cloned.additionalButton2Width = additionalButton2Width
+    
+    cloned.additionalButton3Text = additionalButton3Text
+    cloned.additionalButton3Image = additionalButton3Image
+    cloned.additionalButton3Width = additionalButton3Width
+    
+    cloned.additionalButton4Text = additionalButton4Text
+    cloned.additionalButton4Image = additionalButton4Image
+    cloned.additionalButton4Width = additionalButton4Width
+    
+    cloned.additionalButton5Text = additionalButton5Text
+    cloned.additionalButton5Image = additionalButton5Image
+    cloned.additionalButton5Width = additionalButton5Width
+    
     cloned.editedEvent = self
     return cloned
   }
